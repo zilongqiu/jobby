@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  postgres:
+    image: postgres:latest
+    restart: always
+    container_name: "postgres"
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=zilong
+      - POSTGRES_DB=jobby
+  web:
+    build: .
+    links:
+      - postgres
+    container_name: Jobby-Service
+    restart: on-failure
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DB_HOST=postgres
+    depends_on:
+      - postgres
